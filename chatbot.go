@@ -207,6 +207,11 @@ func (c *chatbot) Run() (err error) {
 
 		// Check is offline
 		if c.isOffline {
+			// if not at, ignore
+			if !strings.StartsWith(msg.Content, fmt.Sprintf("@%s", c.self.NickName)) {
+				return
+			}
+
 			if c.onOffline != nil {
 				if err := c.onOffline(msg, handleReply); err != nil {
 					logger.Errorf("failed to handdle offline: %v", err)
