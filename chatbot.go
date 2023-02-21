@@ -153,21 +153,6 @@ func (c *chatbot) Run() (err error) {
 			return nil
 		}
 
-		// Check is offline
-		if c.isOffline {
-			if c.onOffline != nil {
-				if err := c.onOffline(msg, handleReply); err != nil {
-					logger.Errorf("failed to handdle offline: %v", err)
-				}
-				return
-			}
-
-			if err := handleReply("bot is offline"); err != nil {
-				logger.Errorf("failed to reply when offline: %v", err)
-			}
-			return
-		}
-
 		// @TODO 群聊无法区分 Admin 用户 ID，导致无法在群里使用命令
 		if !msg.IsSendByGroup() {
 			// Checking Commands
@@ -218,6 +203,21 @@ func (c *chatbot) Run() (err error) {
 				}
 				return
 			}
+		}
+
+		// Check is offline
+		if c.isOffline {
+			if c.onOffline != nil {
+				if err := c.onOffline(msg, handleReply); err != nil {
+					logger.Errorf("failed to handdle offline: %v", err)
+				}
+				return
+			}
+
+			if err := handleReply("bot is offline"); err != nil {
+				logger.Errorf("failed to reply when offline: %v", err)
+			}
+			return
 		}
 
 		// @TODO specifical command: *, used for common message
@@ -344,6 +344,6 @@ func (c *chatbot) SetOnline() error {
 }
 
 func (c *chatbot) SetOffline() error {
-	c.isOffline = false
+	c.isOffline = true
 	return nil
 }
