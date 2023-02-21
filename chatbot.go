@@ -249,7 +249,11 @@ func (c *chatbot) Run() (err error) {
 		qrcodeUrl := openwechat.GetQrcodeUrl(uuid)
 		if c.cfg.ReprtURL != "" {
 			logger.Infof("二维码访问地址已发送到飞书: %s", c.cfg.ReprtURL)
-			token := strings.Replace(c.cfg.ReprtURL, feishuWebhook.BaseURI, "", 1)
+			token := strings.Replace(c.cfg.ReprtURL, feishuWebhook.BaseURI+"/", "", 1)
+			if token[len(token)-1] == '/' {
+				token = token[:len(token)-1]
+			}
+
 			if token == "" {
 				logger.Errorf("无效的飞书机器人 Webhook: %s", c.cfg.ReprtURL)
 				return
