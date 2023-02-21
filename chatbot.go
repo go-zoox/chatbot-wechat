@@ -255,15 +255,8 @@ func (c *chatbot) Run() (err error) {
 				return
 			}
 
-			if c.self == nil {
-				c.self, err = bot.GetCurrentUser()
-				if err != nil {
-					logger.Errorf("failed to get robot user(1): %v", err)
-				}
-			}
-
 			f := feishuWebhook.New(token)
-			if err := f.SendText(fmt.Sprintf("微信机器人(%s)登录二维码：%s", c.self.NickName, qrcodeUrl)); err != nil {
+			if err := f.SendText(fmt.Sprintf("微信机器人登录二维码：%s", qrcodeUrl)); err != nil {
 				logger.Errorf("failed to report url %s", c.cfg.ReprtURL)
 			}
 		} else {
