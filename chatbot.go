@@ -208,6 +208,10 @@ func (c *chatbot) Run() (err error) {
 		// Check is offline
 		if c.isOffline {
 			// if not at, ignore
+			if !msg.IsAt() {
+				return
+			}
+			// is not at robot, ignore
 			if !strings.StartsWith(msg.Content, fmt.Sprintf("@%s", c.self.NickName)) {
 				return
 			}
