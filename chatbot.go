@@ -203,7 +203,7 @@ func (c *chatbot) Run() (err error) {
 					return
 				}
 
-				logger.Errorf("failed to handler command(%s): %v", commandText, err)
+				logger.Errorf("failed to handle command(%s): %v", commandText, err)
 				logger.Infof("transfer command as question, send it(%s) to chatgpt ...", commandText)
 			}
 		}
@@ -343,11 +343,9 @@ func (c *chatbot) handleCommand(admin *Admin, cmd, arg string, msg *EventRequest
 		if err != nil {
 			return fmt.Errorf("failed to run command(%s): %v", cmd, err)
 		}
-	} else {
-		logger.Infof("command not found: %s", cmd)
 	}
 
-	return nil
+	return fmt.Errorf("command not found: %s", cmd)
 }
 
 func (c *chatbot) SetOnline() error {
