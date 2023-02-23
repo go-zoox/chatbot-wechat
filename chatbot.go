@@ -198,10 +198,13 @@ func (c *chatbot) Run() (err error) {
 				}
 
 				logger.Infof("onCommand start: %s", commandText)
-				if err := c.handleCommand(admin, cmd, arg, msg, handleReply); err != nil {
-					logger.Errorf("failed to parse command(%s): %v", commandText, err)
+				if err = c.handleCommand(admin, cmd, arg, msg, handleReply); err == nil {
+					logger.Infof("success to handle command: %s", commandText)
+					return
 				}
-				return
+
+				logger.Errorf("failed to handler command(%s): %v", commandText, err)
+				logger.Infof("transfer command as question, send it(%s) to chatgpt ...", commandText)
 			}
 		}
 
